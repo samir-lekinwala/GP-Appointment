@@ -1,7 +1,29 @@
-<div class="container">
-  {{#each puppies}}
-  <div class="puppy-list">
-    <a href="/{{id}}"><img class="img-circle" src="{{image}}" alt="{{name}}"></a>
-  </div>
-  {{/each}}
-</div>
+<h2 class="title">Make your appointment</h2><br/>
+
+<form class="form" action="/" method="post">
+  <label for="name" class="form-item">
+    Name: <input type="text" name="name" id="name">
+  </label>
+
+  <label for="phone" class="form-item">
+    Phone: <input type="text" name="phone" id="phone">
+  </label>
+
+  <label for="email" class="form-item">
+    Email: <input type="text" name="email" id="email">
+  </label>
+
+  <label for="note" class="form-item">
+    Note: <input type="text" name="note" id="note">
+  </label>
+
+  <label for="date" class="form-item">
+    Prefer Date：<input type="date" id="date" name="date">
+  </label>
+
+  <label for="time" class="form-item">
+    Time：<input type="time" id="time" name="time">
+  </label>
+
+  <input type="submit" value="Submit">
+</form>
