@@ -35,32 +35,52 @@ server.get('/', (req, res) => {
 server.post('/', async (req, res) => {
   let data = await readData()
 
-  let idArr = []
-  for (let i = 0; i < data.length; i++) {
-    idArr.push(data[i]['id'])
-  }
-  let maxId
-  if (idArr.length > 0) {
-    maxId = Math.max(...idArr)
-  } else {
-    maxId = 0
-  }
-  const newId = maxId + 1
-  const newAppointment = {
-    id: newId,
-    ...req.body,
-  }
-  data.push(newAppointment)
+  const newGp = req.body.gp
+  const newDate = req.body.date
+  const newTime = req.body.time
 
-  await fs.writeFile(
-    Path.join(__dirname, `./data/data.json`),
-    JSON.stringify(data, null, 2),
-    {
-      encoding: 'utf-8',
+  const sameAppointment = data.find((item) => {
+    if (
+      item['gp'] === newGp &&
+      item['date'] === newDate &&
+      item['time'] === newTime
+    ) {
+      return true
+    } else {
+      return false
     }
-  )
+  })
 
-  res.redirect('appointments')
+  if (sameAppointment) {
+    res.send(`Unavailable Time <a href='/'>Back to home page</a>`)
+  } else {
+    let idArr = []
+    for (let i = 0; i < data.length; i++) {
+      idArr.push(data[i]['id'])
+    }
+    let maxId
+    if (idArr.length > 0) {
+      maxId = Math.max(...idArr)
+    } else {
+      maxId = 0
+    }
+    const newId = maxId + 1
+    const newAppointment = {
+      id: newId,
+      ...req.body,
+    }
+    data.push(newAppointment)
+
+    await fs.writeFile(
+      Path.join(__dirname, `./data/data.json`),
+      JSON.stringify(data, null, 2),
+      {
+        encoding: 'utf-8',
+      }
+    )
+
+    res.redirect('appointments')
+  }
 })
 
 server.get('/appointments', async (req, res) => {
