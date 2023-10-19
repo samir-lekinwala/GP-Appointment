@@ -7,7 +7,7 @@
     "email": "example@example.com",
     "note": "skin",
     "date": "2023-10-26",
-    "time": "11:01'"
+    "time": "11:01"
   },
   {
     "id": 2,
@@ -48,45 +48,5 @@
     "note": "note",
     "date": "2023-10-26",
     "time": "11:05"
-  },
-  {
-    "id": 6,
-    "gp": "gp1",
-    "name": "",
-    "phone": "",
-    "email": "",
-    "note": "",
-    "date": "",
-    "time": ""
-  },
-  {
-    "id": 7,
-    "gp": "gp1",
-    "name": "",
-    "phone": "",
-    "email": "",
-    "note": "",
-    "date": "",
-    "time": ""
-  },
-  {
-    "id": 8,
-    "gp": "gp1",
-    "name": "name",
-    "phone": "",
-    "email": "",
-    "note": "",
-    "date": "",
-    "time": ""
-  },
-  {
-    "id": 9,
-    "gp": "gp1",
-    "name": "name",
-    "phone": "",
-    "email": "email",
-    "note": "",
-    "date": "2023-10-19",
-    "time": "14:29"
   }
 ]

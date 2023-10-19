@@ -73,6 +73,28 @@ server.get('/appointments', async (req, res) => {
   res.render(template, viewData)
 })
 
+server.get('/appointments/delete/:id', async (req, res) => {
+  const data = await readData()
+  const id = Number(req.params.id)
+  const newData = data.filter((item) => {
+    if (item['id'] === id) {
+      return false
+    } else {
+      return true
+    }
+  })
+
+  await fs.writeFile(
+    Path.join(__dirname, `./data/data.json`),
+    JSON.stringify(newData, null, 2),
+    {
+      encoding: 'utf-8',
+    }
+  )
+
+  res.redirect('/appointments')
+})
+
 server.get('/appointments/edit/:id', async (req, res) => {
   const data = await readData()
   const value = req.params.id
