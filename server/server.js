@@ -18,5 +18,8 @@ server.set('view engine', 'hbs')
 server.set('views', Path.resolve('server/views'))
 
 // Your routes/router(s) should go here
+server.get('/', (req, res) => {
+  res.send('This is Appointment Home Page')
+})
 
 export default server
