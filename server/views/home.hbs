@@ -1,3 +1,4 @@
+<a class="nav" href="/appointments">Appointments History</a>
 <h2 class="title">Make your appointment</h2><br/>
 
 <form class="form" action="/" method="post">
@@ -14,7 +15,7 @@
   </label>
 
   <label for="name" class="form-item">
-    Name: <input type="text" name="name" id="name">
+    Name: <input type="text" name="name" id="name" required>
   </label>
 
   <label for="phone" class="form-item">
@@ -22,7 +23,7 @@
   </label>
 
   <label for="email" class="form-item">
-    Email: <input type="text" name="email" id="email">
+    Email: <input type="text" name="email" id="email" required>
   </label>
 
   <label for="note" class="form-item">
@@ -30,11 +31,11 @@
   </label>
 
   <label for="date" class="form-item">
-    Prefer Date：<input type="date" id="date" name="date">
+    Prefer Date：<input type="date" id="date" name="date" required>
   </label>
 
   <label for="time" class="form-item">
-    Time：<input type="time" id="time" name="time">
+    Time：<input type="time" id="time" name="time" required>
   </label>
 
   <input type="submit" value="Submit">
