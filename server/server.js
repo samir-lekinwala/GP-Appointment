@@ -19,7 +19,15 @@ server.set('views', Path.resolve('server/views'))
 
 // Your routes/router(s) should go here
 server.get('/', (req, res) => {
-  res.send('This is Appointment Home Page')
+  res.render('home')
+})
+
+server.post('/', (req, res) => {
+  res.redirect('appointments')
+})
+
+server.get('/appointments', (req, res) => {
+  res.send('This will be appointments history page')
 })
 
 export default server
