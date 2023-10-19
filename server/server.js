@@ -35,16 +35,14 @@ server.get('/', (req, res) => {
 server.post('/', async (req, res) => {
   let data = await readData()
 
-  const newGp = req.body.gp
-  const newDate = req.body.date
-  const newTime = req.body.time
+  const { gp, date, time } = req.body
+
+  // const newGp = req.body.gp
+  // const newDate = req.body.date
+  // const newTime = req.body.time
 
   const sameAppointment = data.find((item) => {
-    if (
-      item['gp'] === newGp &&
-      item['date'] === newDate &&
-      item['time'] === newTime
-    ) {
+    if (item['gp'] === gp && item['date'] === date && item['time'] === time) {
       return true
     } else {
       return false
