@@ -1,0 +1,17 @@
+<div class="container">
+  <ol>
+    {{#each appointments}}
+      <li>
+        GP: {{gp}}<br/>
+        Name: {{name}}<br/>
+        Phone: {{phone}}<br/>
+        Email: {{email}}<br/>
+        Note: {{note}}<br/>
+        Date: {{date}}<br/>
+        Time: {{time}}<br/>
+        <a href="/appointments/edit/{{id}}">Edit</a><br/>
+        <a href="/appointments/delete/{{id}}">Delete</a>
+      </li>
+    {{/each}}
+  </ol>
+</div>
