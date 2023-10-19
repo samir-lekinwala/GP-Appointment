@@ -36,15 +36,19 @@ server.post('/', async (req, res) => {
   let data = await readData()
 
   let idArr = []
-  for (let i=0; i<data.length; i++) {
+  for (let i = 0; i < data.length; i++) {
     idArr.push(data[i]['id'])
   }
   let maxId
-  if (idArr.length>0) {maxId = Math.max(...idArr)}else{maxId=0}
+  if (idArr.length > 0) {
+    maxId = Math.max(...idArr)
+  } else {
+    maxId = 0
+  }
   const newId = maxId + 1
   const newAppointment = {
     id: newId,
-    ...req.body
+    ...req.body,
   }
   data.push(newAppointment)
 
@@ -63,10 +67,48 @@ server.get('/appointments', async (req, res) => {
   const template = 'appointments'
   let data = await readData()
   const viewData = {
-    appointments: data
+    appointments: data,
   }
-  
+
   res.render(template, viewData)
+})
+
+server.get('/appointments/edit/:id', async (req, res) => {
+  const data = await readData()
+  const value = req.params.id
+  const viewData = data.find((item) => {
+    if (item['id'] === Number(value)) {
+      return true
+    }
+  })
+  const template = 'edit'
+
+  res.render(template, viewData)
+})
+
+server.post('/appointments/edit/:id', async (req, res) => {
+  let data = await readData()
+  const value = req.params.id
+
+  const newData = data.map((item) => {
+    if (item['id'] === Number(value)) {
+      item = {
+        id: Number(value),
+        ...req.body,
+      }
+    }
+    return item
+  })
+
+  await fs.writeFile(
+    Path.join(__dirname, `./data/data.json`),
+    JSON.stringify(newData, null, 2),
+    {
+      encoding: 'utf-8',
+    }
+  )
+
+  res.redirect('/appointments')
 })
 
 export default server
