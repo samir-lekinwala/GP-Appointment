@@ -32,14 +32,11 @@ server.get('/', (req, res) => {
   res.render('home')
 })
 
+// Check Schedule for conflicts post
 server.post('/', async (req, res) => {
   let data = await readData()
 
   const { gp, date, time } = req.body
-
-  // const newGp = req.body.gp
-  // const newDate = req.body.date
-  // const newTime = req.body.time
 
   const sameAppointment = data.find((item) => {
     if (item['gp'] === gp && item['date'] === date && item['time'] === time) {
@@ -50,7 +47,7 @@ server.post('/', async (req, res) => {
   })
 
   if (sameAppointment) {
-    res.send(`Unavailable Time <a href='/'>Back to home page</a>`)
+    res.render('conflict')
   } else {
     let idArr = []
     for (let i = 0; i < data.length; i++) {
@@ -77,18 +74,41 @@ server.post('/', async (req, res) => {
       }
     )
 
-    res.redirect('appointments')
+    res.redirect('/view-appointments')
   }
 })
 
-server.get('/appointments', async (req, res) => {
-  const template = 'appointments'
+// Our route to the view appointment form
+server.get('/view-appointments', (req, res) => {
+  res.render('view-appointment')
+})
+
+server.post('/view-appointments', async (req, res) => {
   let data = await readData()
+  const name = req.body.name
+  const filteredData = data.filter((item) => {
+    if (item['name'] === name) {
+      return true
+    } else {
+      return false
+    }
+  })
+
   const viewData = {
-    appointments: data,
+    appointments: filteredData,
   }
 
-  res.render(template, viewData)
+  res.render('prevAppointments', viewData)
+})
+
+server.get('/appointments', async (req, res) => {
+  // const template = 'view-appointment'
+  // let data = await readData()
+  // const viewData = {
+  //   appointments: data,
+  // }
+  res.redirect('/view-appointments')
+  // res.render(template, viewData)
 })
 
 server.get('/appointments/delete/:id', async (req, res) => {
