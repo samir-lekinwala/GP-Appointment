@@ -90,8 +90,10 @@ server.get('/appointments', async (req, res) => {
     appointments: data,
   }
 
-  res.render(template, viewData)
+  res.render(template, { layout: 'appointment-history', viewData: viewData })
 })
+
+// { layout: 'appointment-history', viewData: viewData }
 
 server.get('/appointments/delete/:id', async (req, res) => {
   const data = await readData()
