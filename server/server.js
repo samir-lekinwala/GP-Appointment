@@ -43,7 +43,10 @@ server.post('/', async (req, res) => {
     if (
       item['gp'] === newGp &&
       item['date'] === newDate &&
-      item['time'] === newTime
+      Number(item['time'].split(':').join('')) + 15 >
+        Number(newTime.split(':').join('')) &&
+      Number(newTime.split(':').join('')) >
+        Number(item['time'].split(':').join(''))
     ) {
       return true
     } else {
