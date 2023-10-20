@@ -1,25 +1,5 @@
 [
   {
-    "id": 6,
-    "gp": "gp1",
-    "name": "Cong",
-    "phone": "0215555",
-    "email": "e@e.com",
-    "note": "cold",
-    "date": "2023-10-25",
-    "time": "11:35"
-  },
-  {
-    "id": 7,
-    "gp": "gp1",
-    "name": "namehaha",
-    "phone": "fafafaf",
-    "email": "afdfafafda",
-    "note": "cold",
-    "date": "2023-10-27",
-    "time": "10:30"
-  },
-  {
     "id": 8,
     "gp": "gp1",
     "name": "Samir",
