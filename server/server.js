@@ -135,25 +135,58 @@ server.post('/appointments/edit/:id', async (req, res) => {
   let data = await readData()
   const value = req.params.id
 
-  const newData = data.map((item) => {
+  const newGp = req.body.gp
+  const newDate = req.body.date
+  const newTime = req.body.time
+
+  const myArr = data.filter((item) => {
     if (item['id'] === Number(value)) {
-      item = {
-        id: Number(value),
-        ...req.body,
-      }
+      return false
+    } else {
+      return true
     }
-    return item
   })
 
-  await fs.writeFile(
-    Path.join(__dirname, `./data/data.json`),
-    JSON.stringify(newData, null, 2),
-    {
-      encoding: 'utf-8',
+  const sameAppointment = myArr.find((item) => {
+    if (
+      item['gp'] === newGp &&
+      item['date'] === newDate &&
+      Number(item['time'].split(':').join('')) + 15 >
+        Number(newTime.split(':').join('')) &&
+      Number(newTime.split(':').join('')) >
+        Number(item['time'].split(':').join(''))
+    ) {
+      return true
+    } else {
+      return false
     }
-  )
+  })
 
-  res.redirect('/appointments')
+  if (sameAppointment) {
+    res.send(
+      `Unavailable Time <a href='/appointments/edit/${value}'>Back to edit page</a>`
+    )
+  } else {
+    const newData = data.map((item) => {
+      if (item['id'] === Number(value)) {
+        item = {
+          id: Number(value),
+          ...req.body,
+        }
+      }
+      return item
+    })
+
+    await fs.writeFile(
+      Path.join(__dirname, `./data/data.json`),
+      JSON.stringify(newData, null, 2),
+      {
+        encoding: 'utf-8',
+      }
+    )
+
+    res.redirect('/appointments')
+  }
 })
 
 export default server
