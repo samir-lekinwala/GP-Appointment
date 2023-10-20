@@ -32,18 +32,20 @@ server.get('/', (req, res) => {
   res.render('home')
 })
 
+// Check Schedule for conflicts post
 server.post('/', async (req, res) => {
   let data = await readData()
 
-  const newGp = req.body.gp
-  const newDate = req.body.date
-  const newTime = req.body.time
+  const { gp, date, time } = req.body
 
   const sameAppointment = data.find((item) => {
     if (
-      item['gp'] === newGp &&
-      item['date'] === newDate &&
-      item['time'] === newTime
+      item['gp'] === gp &&
+      item['date'] === date &&
+      Number(item['time'].split(':').join('')) + 15 >=
+        Number(time.split(':').join('')) &&
+      Number(time.split(':').join('')) >=
+        Number(item['time'].split(':').join(''))
     ) {
       return true
     } else {
@@ -52,7 +54,7 @@ server.post('/', async (req, res) => {
   })
 
   if (sameAppointment) {
-    res.send(`Unavailable Time <a href='/'>Back to home page</a>`)
+    res.render('conflict')
   } else {
     let idArr = []
     for (let i = 0; i < data.length; i++) {
@@ -79,19 +81,44 @@ server.post('/', async (req, res) => {
       }
     )
 
-    res.redirect('appointments')
+    res.redirect('/view-appointments')
   }
 })
 
-server.get('/appointments', async (req, res) => {
-  const template = 'appointments'
+// Our route to the view appointment form
+server.get('/view-appointments', (req, res) => {
+  res.render('view-appointment')
+})
+
+server.post('/view-appointments', async (req, res) => {
   let data = await readData()
+  const name = req.body.name
+  const template = 'prevAppointments'
+  const filteredData = data.filter((item) => {
+    if (item['name'] === name) {
+      return true
+    } else {
+      return false
+    }
+  })
+
   const viewData = {
-    appointments: data,
+    appointments: filteredData,
   }
 
-  res.render(template, viewData)
+  res.render(template, { layout: 'appointment-history', viewData: viewData })
 })
+server.get('/appointments', async (req, res) => {
+  // const template = 'view-appointment'
+  // let data = await readData()
+  // const viewData = {
+  //   appointments: data,
+  // }
+  res.redirect('/view-appointments')
+  // res.render(template, viewData)
+})
+
+// { layout: 'appointment-history', viewData: viewData }
 
 server.get('/appointments/delete/:id', async (req, res) => {
   const data = await readData()
@@ -131,26 +158,56 @@ server.get('/appointments/edit/:id', async (req, res) => {
 server.post('/appointments/edit/:id', async (req, res) => {
   let data = await readData()
   const value = req.params.id
+  const { gp, date, time } = req.body
 
-  const newData = data.map((item) => {
+  const myArr = data.filter((item) => {
     if (item['id'] === Number(value)) {
-      item = {
-        id: Number(value),
-        ...req.body,
-      }
+      return false
+    } else {
+      return true
     }
-    return item
   })
 
-  await fs.writeFile(
-    Path.join(__dirname, `./data/data.json`),
-    JSON.stringify(newData, null, 2),
-    {
-      encoding: 'utf-8',
+  const sameAppointment = myArr.find((item) => {
+    if (
+      item['gp'] === gp &&
+      item['date'] === date &&
+      Number(item['time'].split(':').join('')) + 15 >=
+        Number(time.split(':').join('')) &&
+      Number(time.split(':').join('')) >=
+        Number(item['time'].split(':').join(''))
+    ) {
+      return true
+    } else {
+      return false
     }
-  )
+  })
 
-  res.redirect('/appointments')
+  if (sameAppointment) {
+    res.send(
+      `Unavailable Time <a href='/appointments/edit/${value}'>Back to edit page</a>`
+    )
+  } else {
+    const newData = data.map((item) => {
+      if (item['id'] === Number(value)) {
+        item = {
+          id: Number(value),
+          ...req.body,
+        }
+      }
+      return item
+    })
+
+    await fs.writeFile(
+      Path.join(__dirname, `./data/data.json`),
+      JSON.stringify(newData, null, 2),
+      {
+        encoding: 'utf-8',
+      }
+    )
+
+    res.redirect('/appointments')
+  }
 })
 
 export default server
